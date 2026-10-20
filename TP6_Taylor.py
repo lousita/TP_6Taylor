@@ -103,7 +103,7 @@ plt.show()
 compteur=0
 D= Y[Y-Y2<10**(-3)]
 
-print(len(D)/len(X)*100,"%")
+print("Coincidence de sinus avec son approximation de taylor",len(D)/len(X)*100,"%")
 
 plt.plot(X,np.cos(X))
 plt.plot(X,taylor2(X,np.cos,0))
@@ -113,6 +113,23 @@ plt.show()
 
 def custom(X):
     """retourne 2 * sin(X) + cos(X/4)"""
-    return 2*sin(X)+cos(X/4)
+    return 2*np.sin(X)+np.cos(X/4)
 
+Y3 = custom(X)
+Y4 = taylor2(X,custom,14)
+
+plt.plot(X,Y3)
+plt.plot(X,Y4)
+plt.show()
+
+Y5=Y3[Y3-Y4<10**(-3)]
+print("Coincidence à", len(Y5)/len(Y3)*100)
+
+#%% L'application widgets et graphique
+
+import streamlit as st
+import autograd.numpy as np
+from autograd import grad
+from math import factorial
+import matplotlib.pyplot as plt
 
