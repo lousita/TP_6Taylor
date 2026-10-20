@@ -1,26 +1,6 @@
-# Eléonore Veyron
-# TP6 TAYLOR 
+#Eléonore Veyron
 
-import streamlit as st
-
-#%% Première application
-
-
-st.title("Approximation de Taylor")
-st.header("Première approximation") #sous-titre
-st.write("Bienvenue dans votre outil de visualisation.")
-
-#ecrire dans le terminal 
-# streamlit run opp.py
-#avec opp le nom du fichier qu'on veut ouvrier avec streamlit
-
-#%% Afficher une formule 
-st.latex(r'''P_n(x) = \sum_{k=0}^{n} \frac{f^{(k)}(0)}{k!} \, x^k''')
-
-#%% Modèle d'exécution
-
-valeur = st.slider("Choisissez une valeur", 0, 10)
-st.write("Vous avez choisi :", valeur)
+#TP 6 TAYLOR - VERSION PYTHON
 
 #%% 2. Découverte d'autograd
 
@@ -40,7 +20,9 @@ print(sin_der(X))
 
 print(sin_der(X)==np.cos(X))
 
-#%% Formule de Taylor 
+
+#%% 3. Formule de Taylor 
+
 # Verson 1 : dérivées fournies 
 
 from math import factorial
@@ -123,13 +105,4 @@ plt.plot(X,Y4)
 plt.show()
 
 Y5=Y3[Y3-Y4<10**(-3)]
-print("Coincidence à", len(Y5)/len(Y3)*100)
-
-#%% L'application widgets et graphique
-
-import streamlit as st
-import autograd.numpy as np
-from autograd import grad
-from math import factorial
-import matplotlib.pyplot as plt
-
+print("Coincidence à", len(Y5)/len(Y3)*100,"%")
