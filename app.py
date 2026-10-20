@@ -3,6 +3,7 @@
 
 import streamlit as st
 
+
 #%% Première application
 
 
@@ -30,7 +31,23 @@ from autograd import grad
 from math import factorial
 import matplotlib.pyplot as plt
 
-FONCTION = {"sinus" = np.sin(x), "cosinus" = np.cosinus(x)
-            "exponentiel"= np.exp(x), "log"= np.log(1+x)
-            "custom"= custom(x)}
 
+def custom(X):
+    """retourne 2 * sin(X) + cos(X/4)"""
+    return 2*np.sin(X)+np.cos(X/4)
+
+
+
+FONCTION = {"sinus" : np.sin, "cosinus" : np.cos,
+            "exponentiel" : np.exp, "log" : lambda x:np.log(1+x),
+            "custom" : custom}
+
+#4.3 Widgets 
+
+with st.sidebar:
+    nom_fonction= st.selectbox("Fonction", list(FONCTION))
+    n = st.slider("n", 0, 10)
+    intervalle = st.slider("intervalle", 2.0, 20.0, 12.6)
+
+# 4.4 Calculs et tracé
+f = FONCTIONS["nom"]
