@@ -32,19 +32,13 @@ X = np.linspace(0,np.pi*2,10)
 
 # %% Dérivée
 
-def sin_der(X):
-    return np.vectorize(grad(np.sin(X)))
+sin_der = np.vectorize(grad(np.sin))
 
 print(sin_der(X))
-Y=[0]
-print(sin_der(Y))
 
 # %%
 
-der = sin_der(X)
-diff = der[der != np.vectorize(np.cos(X))]
-if diff == []:
-    print("On a bien égalité entre sin_der(X) et np.cos(X)")
+print(sin_der(X)==np.cos(X))
 
 #%% Formule de Taylor 
 # Verson 1 : dérivées fournies 
@@ -59,7 +53,66 @@ def taylor1(X, derivatives):
     Retourne Y, l'approximation de Taylor sur X pour une fonction
     qui aurait ces dérivées en 0.
     """
-    Y=[]
-    for k in range(len(X)):
-        Y.append(sum([derivatives[i] / math.factorial(i) * X[k]**i for i in range(len(derivatives))]))
+    Y=np.zeros_like(X)
+    for i,d in enumerate(derivatives):
+        Y = Y + d*X**i/factorial(i)
     return Y
+sinus10 = [0, 1, 0, -1, 0, 1, 0, -1, 0, 1]
+X = np.linspace(-2 * np.pi, 2 * np.pi, 400)
+
+print(X, taylor1(X,sinus10))
+
+import matplotlib
+matplotlib.use("TkAgg")
+print(matplotlib.get_backend())
+
+
+import matplotlib.pyplot as plt 
+
+plt.plot(X,taylor1(X,sinus10))
+plt.plot(X,np.sin(X))
+plt.show()
+
+#%% Version 2 : dérivées calculées avec autograd
+def taylor2(X, f, n):
+    """
+    X : le domaine
+    f : la fonction (sur scalaire)
+    n : le degré
+
+    Retourne Y, l'approximation de Taylor de f à l'ordre n sur X.
+    """
+    derivatives = []
+    g = f
+    for _ in range(n+1):
+        derivatives.append(g(0.0))
+        g= grad(g)
+    return taylor1(X,derivatives)
+
+# exp à l'ordre 2 : 1 + x + x^2/2
+assert np.allclose(taylor2(X, np.exp, 2), 1 + X + X**2 / 2)
+
+# sinus au degré 10, à comparer avec np.sin(X)
+Y = np.sin(X)
+Y2 = taylor2(X, np.sin, 10)
+
+plt.plot(X,Y)
+plt.plot(X,Y2)
+plt.show()
+
+compteur=0
+D= Y[Y-Y2<10**(-3)]
+
+print(len(D)/len(X)*100,"%")
+
+plt.plot(X,np.cos(X))
+plt.plot(X,taylor2(X,np.cos,0))
+plt.show()
+
+#%% Une fonction personnalisée
+
+def custom(X):
+    """retourne 2 * sin(X) + cos(X/4)"""
+    return 2*sin(X)+cos(X/4)
+
+
